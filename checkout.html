@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Aros Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="checkout">
+  <header class="top-header compact-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">Ar</span>
+        <span class="brand-text">
+          <strong>Aros | Market</strong>
+          <small data-i18n="order">Buyurtma</small>
+        </span>
+      </a>
+
+      <a class="header-phone" href="tel:+998901234567">+998 90 123 45 67</a>
+
+      <div class="header-actions">
+        <a class="icon-btn cart-link" href="cart.html" aria-label="View cart">
+          <span data-i18n="cart">Cart</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-section">
+    <div class="container checkout-layout">
+      <section class="checkout-form-card">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker" data-i18n="order">Buyurtma</span>
+            <h1 data-i18n="checkout_title">Ma'lumotlaringizni kiriting</h1>
+          </div>
+        </div>
+
+        <form id="checkoutForm" class="checkout-form">
+          <label>
+            <span data-i18n="full_name">To'liq ism</span>
+            <input type="text" id="customerName" placeholder="Ali Valiyev" data-i18n-placeholder="Name" required>
+          </label>
+
+          <label>
+            <span data-i18n="phone_number">Telefon raqami</span>
+            <input type="tel" id="customerPhone" placeholder="+998 90 123 45 67" required>
+          </label>
+
+          <label>
+            <span data-i18n="address">Manzil</span>
+            <textarea id="customerAddress" rows="4" placeholder="Toshkent, Chilonzor tumani, 15-uy" data-i18n-placeholder="address_placeholder" required></textarea>
+          </label>
+
+          <button class="primary-btn full-width" type="submit" data-i18n="place_order">Buyurtma berish</button>
+          <p class="form-status" id="checkoutStatus"></p>
+        </form>
+      </section>
+
+      <aside class="summary-card" id="checkoutSummary"></aside>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

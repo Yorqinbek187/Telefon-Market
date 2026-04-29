@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart | Aros Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="cart">
+  <header class="top-header compact-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">Ar</span>
+        <span class="brand-text">
+          <strong>Aros | Market</strong>
+          <small data-i18n="cart">Savat</small>
+        </span>
+      </a>
+
+      <a class="header-phone" href="tel:+998901234567">+998 90 123 45 67</a>
+
+      <div class="header-actions">
+        <a class="icon-btn" href="index.html" aria-label="Back to home" data-i18n="home">Home</a>
+        <a class="icon-btn cart-link" href="checkout.html" aria-label="Go to checkout">
+          <span data-i18n="order">Order</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-section">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker" data-i18n="cart">Savat</span>
+          <h1>Xaridlaringiz</h1>
+        </div>
+        <a class="secondary-link" href="checkout.html" data-i18n="proceed_to_order">Buyurtmaga o'tish</a>
+      </div>
+
+      <div class="cart-layout">
+        <section class="cart-items-panel" id="cartItemsContainer"></section>
+        <aside class="summary-card" id="cartSummary"></aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

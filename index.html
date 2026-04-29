@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aros Market | Online Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+  <div class="site-shell">
+    <header class="top-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">Ar</span>
+          <span class="brand-text">
+            <strong>Aros | Market</strong>
+            <small data-i18n="brand_tagline">Elektronika do'koni</small>
+          </span>
+        </a>
+
+        <div class="header-tools">
+          <button class="location-trigger" id="openLocationModal" type="button">
+            <span class="icon-circle">UZ</span>
+            <span class="location-text">
+              <small data-i18n="delivery_label">Yetkazib berish</small>
+              <strong id="selectedLocationLabel" data-i18n="select_region">Hududni tanlang</strong>
+            </span>
+          </button>
+
+          <a class="header-phone" href="tel:+998901234567">+998 90 123 45 67</a>
+
+          <div class="language-switcher" aria-label="Language selector">
+            <button class="lang-btn active" type="button" data-lang="uz">UZ</button>
+            <button class="lang-btn" type="button" data-lang="ru">RU</button>
+            <button class="lang-btn" type="button" data-lang="en">EN</button>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <a class="icon-btn cart-link" href="cart.html" aria-label="View cart">
+            <span data-i18n="cart">Cart</span>
+            <span class="cart-count" id="cartCount">0</span>
+          </a>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <div class="container mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-panel">
+          <a href="#products" data-i18n="nav_phones">Smartfonlar</a>
+          <a href="#products" data-i18n="nav_laptops">Noutbuklar</a>
+          <a href="#products" data-i18n="nav_audio">Audio</a>
+          <a href="#products" data-i18n="nav_accessories">Aksessuarlar</a>
+          <a href="#favorites" data-i18n="favorites">Sevimlilar</a>
+          <a href="cart.html" data-i18n="cart">Savat</a>
+          <a href="checkout.html" data-i18n="order">Buyurtma</a>
+          <a href="tel:+998901234567">+998 90 123 45 67</a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="main-nav">
+      <div class="container nav-inner">
+        <div class="nav-primary">
+          <button class="categories-button" type="button" data-i18n="catalog">Katalog</button>
+          <ul class="nav-links">
+            <li><a href="#products">Smartfonlar</a></li>
+            <li><a href="#products">Noutbuklar</a></li>
+            <li><a href="#products">Audio</a></li>
+            <li><a href="#products">Aqlli soatlar</a></li>
+            <li><a href="#products">Aksessuarlar</a></li>
+            <li><a href="#favorites" data-i18n="favorites">Sevimlilar</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-secondary">
+          <label class="search-box">
+            <input id="searchInput" type="search" placeholder="Mahsulot qidirish" data-i18n-placeholder="search_placeholder">
+          </label>
+          <button class="primary-btn search-btn" id="searchButton" type="button" data-i18n="search">Qidirish</button>
+          <a class="nav-cart-link" href="cart.html" aria-label="View cart">
+            <span data-i18n="cart">Savat</span>
+            <span class="cart-count" id="cartCount">0</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-slider" id="heroSlider">
+            <div class="hero-slides" id="heroSlides"></div>
+            <button class="slider-arrow slider-arrow-prev" id="heroPrev" type="button" aria-label="Previous slide">&#10094;</button>
+            <button class="slider-arrow slider-arrow-next" id="heroNext" type="button" aria-label="Next slide">&#10095;</button>
+            <div class="slider-dots" id="heroDots"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="products-section" id="products">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker" data-i18n="popular_products">Ommabop mahsulotlar</span>
+              <h2 data-i18n="products_title">Bugun xarid qilinayotgan texnikalar</h2>
+            </div>
+            <a class="secondary-link" href="cart.html" data-i18n="open_cart">Savatni ochish</a>
+          </div>
+
+          <div class="products-grid" id="productsGrid"></div>
+        </div>
+      </section>
+
+      <section class="products-section favorites-section" id="favorites">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker" data-i18n="favorites">Sevimlilar</span>
+              <h2 data-i18n="favorites_title">Saqlangan mahsulotlar</h2>
+            </div>
+            <a class="secondary-link" href="#products" data-i18n="browse_products">Mahsulotlarga o'tish</a>
+          </div>
+
+          <div class="products-grid" id="favoritesGrid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>Tel I Do'kon</h3>
+          <p data-i18n="footer_about">Mahalliy elektronika do'koni. Qulay tanlov, sodda buyurtma va ishonchli xizmat.</p>
+        </div>
+        <div>
+          <h4 data-i18n="contact">Aloqa</h4>
+          <p>Tashkent, Uzbekistan</p>
+          <p><a href="tel:+998901234567">+998 90 123 45 67</a></p>
+          <p><a href="mailto:info@telidokon.uz">info@telidokon.uz</a></p>
+        </div>
+        <div>
+          <h4 data-i18n="pages">Sahifalar</h4>
+          <a href="index.html" data-i18n="home">Bosh sahifa</a>
+          <a href="#favorites" data-i18n="favorites">Sevimlilar</a>
+          <a href="cart.html" data-i18n="cart">Savat</a>
+          <a href="checkout.html" data-i18n="order">Buyurtma</a>
+        </div>
+        <div>
+          <h4 data-i18n="social_media">Ijtimoiy tarmoqlar</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Telegram">Telegram</a>
+            <a href="#" aria-label="Instagram">Instagram</a>
+            <a href="#" aria-label="Facebook">Facebook</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="locationModal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="locationModalTitle">
+      <button class="modal-close" id="closeLocationModal" type="button" aria-label="Close modal">X</button>
+      <h3 id="locationModalTitle" data-i18n="location_modal_title">Yetkazib berish hududini tanlang</h3>
+      <p data-i18n="location_modal_text">Hudud va tuman tanlansa, buyurtmani rasmiylashtirish qulayroq bo'ladi.</p>
+
+      <div class="modal-fields">
+        <label class="modal-field">
+          <span data-i18n="region">Viloyat</span>
+          <input type="text" id="regionSearch" placeholder="Viloyat qidirish" data-i18n-placeholder="region_search">
+          <select id="regionSelect"></select>
+        </label>
+
+        <label class="modal-field">
+          <span data-i18n="city_district">Shahar / Tuman</span>
+          <input type="text" id="citySearch" placeholder="Shahar yoki tuman qidirish" data-i18n-placeholder="city_search">
+          <select id="citySelect"></select>
+        </label>
+      </div>
+
+      <button class="primary-btn full-width" id="saveLocationBtn" type="button" data-i18n="save">Saqlash</button>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
