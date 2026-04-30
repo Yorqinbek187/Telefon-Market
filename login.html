@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Aros Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="login">
+  <header class="top-header compact-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">Ar</span>
+        <span class="brand-text">
+          <strong>Aros | Market</strong>
+          <small>Login</small>
+        </span>
+      </a>
+
+      <a class="header-phone" href="tel:+998901234567">+998 90 123 45 67</a>
+
+      <div class="header-actions">
+        <a class="download-app-btn" href="https://play.google.com/store/apps/details?id=uz.uzum.market" target="_blank" rel="noopener noreferrer" aria-label="Download Uzum Market app">
+          <span class="btn-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v10m0 0 4-4m-4 4-4-4M5 17h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span>Download App</span>
+        </a>
+        <a class="icon-btn" href="index.html" aria-label="Back to home">Home</a>
+        <a class="icon-btn cart-link" href="cart.html" aria-label="View cart">
+          <span>Cart</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-section login-page">
+    <div class="container login-layout">
+      <section class="login-panel">
+        <span class="section-kicker">Welcome back</span>
+        <h1>Login to continue shopping</h1>
+        <p class="login-copy">Sign in with your name and contact details to save your account information and continue your order faster.</p>
+
+        <form id="loginForm" class="checkout-form login-form">
+          <label>
+            <span>Full name</span>
+            <input type="text" id="loginName" placeholder="Ali Valiyev" autocomplete="name" required>
+          </label>
+
+          <label>
+            <span>Phone or email</span>
+            <input type="text" id="loginContact" placeholder="+998 90 123 45 67 or user@example.com" autocomplete="username" required>
+          </label>
+
+          <label>
+            <span>Password</span>
+            <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required>
+          </label>
+
+          <button class="primary-btn full-width" type="submit">Submit</button>
+          <p class="form-status" id="loginStatus"></p>
+        </form>
+      </section>
+
+      <aside class="summary-card login-side-card">
+        <h3>Your benefits</h3>
+        <div class="summary-list">
+          <span>Fast checkout</span>
+          <span>24/7</span>
+        </div>
+        <div class="summary-list">
+          <span>Saved account details</span>
+          <span>Secure</span>
+        </div>
+        <div class="summary-list">
+          <span>Order updates</span>
+          <span>Instant</span>
+        </div>
+        <div class="summary-total">
+          <span>Support line</span>
+          <span>+998 90 123 45 67</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
